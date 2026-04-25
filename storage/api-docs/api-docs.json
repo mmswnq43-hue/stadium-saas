@@ -1,0 +1,1928 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Stadium SaaS API Documentation",
+        "description": "API documentation for the Stadium SaaS Backend system. This API handles stadium bookings, management, and tenant operations.",
+        "contact": {
+            "email": "support@stadium-saas.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8080/api",
+            "description": "Local Development Server"
+        }
+    ],
+    "paths": {
+        "/v1/admin/tenants": {
+            "get": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "List all tenants (Super Admin)",
+                "operationId": "386dec9aae2aefb72351e345d41cd8fd",
+                "responses": {
+                    "200": {
+                        "description": "List of tenants"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Create a new tenant/owner account",
+                "operationId": "aebd91b02ec891706ea6636cfbc7a1f6",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "tenant_name",
+                                    "tenant_email",
+                                    "tenant_phone",
+                                    "plan",
+                                    "owner_name",
+                                    "owner_email",
+                                    "owner_password"
+                                ],
+                                "properties": {
+                                    "tenant_name": {
+                                        "type": "string"
+                                    },
+                                    "tenant_email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "plan": {
+                                        "type": "string",
+                                        "enum": [
+                                            "basic",
+                                            "professional",
+                                            "enterprise"
+                                        ]
+                                    },
+                                    "owner_name": {
+                                        "type": "string"
+                                    },
+                                    "owner_email": {
+                                        "type": "string"
+                                    },
+                                    "owner_password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Tenant and Owner created"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v1/admin/tenants/{id}": {
+            "get": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Get tenant details and stats",
+                "operationId": "35d026b3d9d00853aa6300cbc32a9b9f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Tenant details"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v1/admin/tenants/{id}/status": {
+            "patch": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Update tenant status",
+                "operationId": "0ab86eb0f9200134f68f51a8eb58a211",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "status"
+                                ],
+                                "properties": {
+                                    "status": {
+                                        "type": "string",
+                                        "enum": [
+                                            "active",
+                                            "suspended",
+                                            "trial"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Status updated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v1/admin/stats": {
+            "get": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Get platform-wide statistics",
+                "operationId": "df645d038ea30315ebc0ba71ed0e307a",
+                "responses": {
+                    "200": {
+                        "description": "Platform stats"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v1/auth/register": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Register a new customer",
+                "operationId": "c77951e2d0f6fbb7c670e7eb59cb7660",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "phone",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Ahmed Ali"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "ahmed@example.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "0501234567"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User registered successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم إنشاء الحساب بنجاح"
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        },
+        "/v1/auth/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "User login",
+                "operationId": "d0c5ac61d58053f710bbb705e4b17338",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "ahmed@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم تسجيل الدخول بنجاح"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "user": {
+                                                    "type": "object"
+                                                },
+                                                "token": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid credentials"
+                    },
+                    "403": {
+                        "description": "Account inactive"
+                    }
+                }
+            }
+        },
+        "/v1/owner/bookings": {
+            "get": {
+                "tags": [
+                    "Owner"
+                ],
+                "summary": "List all bookings for a tenant",
+                "operationId": "e04b917444e28768be5e636e4e46439f",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of bookings"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v1/owner/bookings/{id}": {
+            "get": {
+                "tags": [
+                    "Owner"
+                ],
+                "summary": "Get booking details",
+                "operationId": "79a01702d67b63ccdabdc0c17f6b588b",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Booking details"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/owner/bookings": {
+            "post": {
+                "tags": [
+                    "Owner"
+                ],
+                "summary": "Store a manual booking (Admin/Owner)",
+                "operationId": "f4b160625e9c01c95d2138d07f6d52cd",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "field_id",
+                                    "date",
+                                    "start_time",
+                                    "end_time",
+                                    "customer_name",
+                                    "customer_phone"
+                                ],
+                                "properties": {
+                                    "field_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "date": {
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "start_time": {
+                                        "type": "string",
+                                        "example": "18:00"
+                                    },
+                                    "end_time": {
+                                        "type": "string",
+                                        "example": "19:00"
+                                    },
+                                    "customer_name": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "customer_phone": {
+                                        "type": "string",
+                                        "example": "0500000000"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Booking created and confirmed"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v1/owner/bookings/{id}/confirm": {
+            "patch": {
+                "tags": [
+                    "Owner"
+                ],
+                "summary": "Confirm a pending booking",
+                "operationId": "6571f1764dc4cb355670a547f22bdefb",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Booking confirmed"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v1/owner/bookings/{id}/cancel": {
+            "patch": {
+                "tags": [
+                    "Owner"
+                ],
+                "summary": "Cancel a booking",
+                "operationId": "ab73080c20ac90d5e43702edc4606375",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "reason": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Booking cancelled"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v1/owner/bookings/{id}/payment": {
+            "patch": {
+                "tags": [
+                    "Owner"
+                ],
+                "summary": "Record payment for a booking",
+                "operationId": "24da7adcb591e0a50d9a67c424b72e6b",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "payment_method"
+                                ],
+                                "properties": {
+                                    "payment_method": {
+                                        "type": "string",
+                                        "enum": [
+                                            "cash",
+                                            "card",
+                                            "online"
+                                        ]
+                                    },
+                                    "payment_reference": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Payment recorded"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/owner/bookings/calendar": {
+            "get": {
+                "tags": [
+                    "Owner"
+                ],
+                "summary": "Get bookings for calendar view",
+                "operationId": "ca5101eff658c6af2064d76473c601eb",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "field_id",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Calendar events"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v1/owner/dashboard": {
+            "get": {
+                "tags": [
+                    "Owner"
+                ],
+                "summary": "Get owner dashboard statistics",
+                "operationId": "c5597a85db25cb8e0d8a405aebbacf0c",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Dashboard statistics"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v1/owner/reports/revenue": {
+            "get": {
+                "tags": [
+                    "Owner"
+                ],
+                "summary": "Get revenue report",
+                "operationId": "9ea11e09d599c00c23a3dce97863eb2c",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "from",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "to",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "group_by",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "day",
+                                "week",
+                                "month"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Revenue data"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v1/owner/stadiums/{stadiumId}/fields": {
+            "get": {
+                "tags": [
+                    "Owner"
+                ],
+                "summary": "List all fields for a stadium",
+                "operationId": "2651c1a18341872d414f52eb754d24e2",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "stadiumId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of fields"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Owner"
+                ],
+                "summary": "Create a new field in a stadium",
+                "operationId": "103b7712890bde3d63c2dbc638bd1bf5",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "stadiumId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "sport_type",
+                                    "size",
+                                    "capacity",
+                                    "surface_type",
+                                    "price_per_hour"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Pitch A"
+                                    },
+                                    "sport_type": {
+                                        "type": "string",
+                                        "example": "football"
+                                    },
+                                    "size": {
+                                        "type": "string",
+                                        "example": "5x5"
+                                    },
+                                    "capacity": {
+                                        "type": "integer",
+                                        "example": 10
+                                    },
+                                    "surface_type": {
+                                        "type": "string",
+                                        "example": "artificial_grass"
+                                    },
+                                    "price_per_hour": {
+                                        "type": "number",
+                                        "example": 150
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Field created"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v1/owner/fields/{id}": {
+            "put": {
+                "tags": [
+                    "Owner"
+                ],
+                "summary": "Update field details",
+                "operationId": "144cd2065d7e12705c24c14bbbe18a6d",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Field updated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/owner/fields/{id}/pricing-rules": {
+            "get": {
+                "tags": [
+                    "Owner"
+                ],
+                "summary": "Get pricing rules for a field",
+                "operationId": "eb254ac7d7ee936f295e0f83de5d7c93",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of rules"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Owner"
+                ],
+                "summary": "Create a pricing rule",
+                "operationId": "4f788de8efc777e115a41504d99bce78",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "type",
+                                    "price",
+                                    "price_type"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Weekend Special"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "time_based",
+                                            "day_based",
+                                            "date_range"
+                                        ]
+                                    },
+                                    "price": {
+                                        "type": "number",
+                                        "example": 200
+                                    },
+                                    "price_type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "fixed",
+                                            "percentage_increase"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Rule created"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/owner/pricing-rules/{ruleId}": {
+            "delete": {
+                "tags": [
+                    "Owner"
+                ],
+                "summary": "Delete a pricing rule",
+                "operationId": "3f58f07014f0ac1c27f192558120e944",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ruleId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Rule deleted"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/owner/fields/{id}/block": {
+            "post": {
+                "tags": [
+                    "Owner"
+                ],
+                "summary": "Block a specific time slot",
+                "operationId": "b1143895fd4b4298f950bfad9184d956",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "date",
+                                    "start_time",
+                                    "end_time"
+                                ],
+                                "properties": {
+                                    "date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2024-12-01"
+                                    },
+                                    "start_time": {
+                                        "type": "string",
+                                        "example": "10:00"
+                                    },
+                                    "end_time": {
+                                        "type": "string",
+                                        "example": "12:00"
+                                    },
+                                    "reason": {
+                                        "type": "string"
+                                    },
+                                    "is_full_day": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Slot blocked"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/owner/fields/{id}/blocked-slots": {
+            "get": {
+                "tags": [
+                    "Owner"
+                ],
+                "summary": "Get blocked slots for a field",
+                "operationId": "4eced8fad39562612dac89d6eb72033c",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of blocked slots"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/owner/blocked-slots/{slotId}": {
+            "delete": {
+                "tags": [
+                    "Owner"
+                ],
+                "summary": "Unblock a slot",
+                "operationId": "05b12e922d0a4815099dc57fd53a5b38",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "slotId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Slot unblocked"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v1/owner/stadiums": {
+            "get": {
+                "tags": [
+                    "Owner"
+                ],
+                "summary": "List all stadiums by owner",
+                "operationId": "a8a2af36f17d3f74bb74a49d1954dbb6",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of stadiums"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Owner"
+                ],
+                "summary": "Create a new stadium",
+                "operationId": "717751c38d3dbd107b46509bab98c7bd",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "city",
+                                    "address",
+                                    "opens_at",
+                                    "closes_at"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Al-Hilal Stadium"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "city": {
+                                        "type": "string",
+                                        "example": "Riyadh"
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "Olaya Street"
+                                    },
+                                    "opens_at": {
+                                        "type": "string",
+                                        "example": "08:00"
+                                    },
+                                    "closes_at": {
+                                        "type": "string",
+                                        "example": "23:00"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Stadium created"
+                    },
+                    "403": {
+                        "description": "Plan limit reached"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v1/owner/stadiums/{id}": {
+            "put": {
+                "tags": [
+                    "Owner"
+                ],
+                "summary": "Update stadium details",
+                "operationId": "7c4bdccec896a9a4f1cfde9e7295eed4",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "is_active": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Stadium updated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Owner"
+                ],
+                "summary": "Delete a stadium",
+                "operationId": "8c38d6f6dd49a057493609a70c3a3f25",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Stadium deleted"
+                    },
+                    "422": {
+                        "description": "Cannot delete stadium with upcoming bookings"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v1/public/bookings/check-availability": {
+            "post": {
+                "tags": [
+                    "Public"
+                ],
+                "summary": "Check field availability and calculate price",
+                "operationId": "a417c1a3fc676a80fa23afeb8baab24d",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "field_id",
+                                    "date",
+                                    "start_time",
+                                    "end_time"
+                                ],
+                                "properties": {
+                                    "field_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2024-12-01"
+                                    },
+                                    "start_time": {
+                                        "type": "string",
+                                        "example": "18:00"
+                                    },
+                                    "end_time": {
+                                        "type": "string",
+                                        "example": "19:00"
+                                    },
+                                    "discount_code": {
+                                        "type": "string",
+                                        "example": "SAVE10"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Availability results"
+                    }
+                }
+            }
+        },
+        "/v1/public/bookings": {
+            "post": {
+                "tags": [
+                    "Public"
+                ],
+                "summary": "Create a new booking",
+                "operationId": "cfe47f125338c2bf7eb0c0df51442826",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "field_id",
+                                    "date",
+                                    "start_time",
+                                    "end_time",
+                                    "customer_name",
+                                    "customer_phone"
+                                ],
+                                "properties": {
+                                    "field_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2024-12-01"
+                                    },
+                                    "start_time": {
+                                        "type": "string",
+                                        "example": "18:00"
+                                    },
+                                    "end_time": {
+                                        "type": "string",
+                                        "example": "19:00"
+                                    },
+                                    "customer_name": {
+                                        "type": "string",
+                                        "example": "Ahmed Ali"
+                                    },
+                                    "customer_phone": {
+                                        "type": "string",
+                                        "example": "0501234567"
+                                    },
+                                    "customer_email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "discount_code": {
+                                        "type": "string"
+                                    },
+                                    "customer_notes": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Booking created"
+                    },
+                    "422": {
+                        "description": "Validation error or unavailable"
+                    }
+                }
+            }
+        },
+        "/v1/public/bookings/track/{bookingNumber}": {
+            "get": {
+                "tags": [
+                    "Public"
+                ],
+                "summary": "Track booking status by number",
+                "operationId": "887c49f4954fae45ee0ab3c0673cb4c3",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "booking_number",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Booking details"
+                    }
+                }
+            }
+        },
+        "/v1/public/bookings/{bookingNumber}/cancel": {
+            "post": {
+                "tags": [
+                    "Public"
+                ],
+                "summary": "Cancel booking by customer",
+                "operationId": "731ed05a99df4115c731e8f41f98afe2",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "booking_number",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "reason": {
+                                        "type": "string",
+                                        "example": "Changed my mind"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Booking cancelled"
+                    }
+                }
+            }
+        },
+        "/public/my-bookings": {
+            "get": {
+                "tags": [
+                    "Public"
+                ],
+                "summary": "Get logged-in user bookings",
+                "operationId": "34bb0183778bf9035cee9543cec67e69",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of user bookings"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v1/public/stadiums": {
+            "get": {
+                "tags": [
+                    "Public"
+                ],
+                "summary": "List all stadiums for a tenant",
+                "operationId": "461268255c94fdee7f98b97d692d1283",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "description": "Tenant slug (e.g. 'zain')",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "city",
+                        "in": "query",
+                        "description": "Filter by city",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sport_type",
+                        "in": "query",
+                        "description": "Filter by sport type",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Tenant not found"
+                    }
+                }
+            }
+        },
+        "/v1/public/stadiums/{slug}": {
+            "get": {
+                "tags": [
+                    "Public"
+                ],
+                "summary": "Get stadium details",
+                "operationId": "76db9140f68b1a7480ab98209724c0d2",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Stadium or Tenant not found"
+                    }
+                }
+            }
+        },
+        "/v1/public/stadiums/{slug}/fields": {
+            "get": {
+                "tags": [
+                    "Public"
+                ],
+                "summary": "Get stadium fields with prices",
+                "operationId": "be91b54fe02f567923aba3262c908864",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sport_type",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            }
+        },
+        "/v1/public/fields/{id}/slots": {
+            "get": {
+                "tags": [
+                    "Public"
+                ],
+                "summary": "Get available slots for a specific date",
+                "operationId": "c326e4dc8ff5d11d7e200530c9d388f7",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            }
+        },
+        "/v1/public/cities": {
+            "get": {
+                "tags": [
+                    "Public"
+                ],
+                "summary": "Get list of available cities",
+                "operationId": "227931650c7af7fbbd56197cc4dd9751",
+                "parameters": [
+                    {
+                        "name": "X-Tenant-Slug",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Admin",
+            "description": "Admin"
+        },
+        {
+            "name": "Authentication",
+            "description": "Authentication"
+        },
+        {
+            "name": "Owner",
+            "description": "Owner"
+        },
+        {
+            "name": "Public",
+            "description": "Public"
+        }
+    ]
+}
