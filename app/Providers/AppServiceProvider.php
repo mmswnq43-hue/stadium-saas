@@ -25,6 +25,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // إجبار النظام على استخدام HTTPS (لحل مشكلة Mixed Content)
+        if (config('app.env') !== 'local') {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
+
         // Register Booking Listeners
         Event::listen(
             [BookingCreated::class, BookingConfirmed::class, BookingCancelled::class],
