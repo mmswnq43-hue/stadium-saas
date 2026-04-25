@@ -33,6 +33,9 @@ COPY . .
 # تثبيت اعتمادات Composer
 RUN composer install --no-dev --optimize-autoloader
 
+# توليد توثيق Swagger (لكي يعمل مجاناً دون الحاجة لـ Shell)
+RUN php artisan l5-swagger:generate
+
 # ضبط صلاحيات المجلدات (مهم جداً لـ Laravel)
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
